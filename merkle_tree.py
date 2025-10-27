@@ -103,31 +103,3 @@ class MerkleTree:
         self.root = current_level[0] if current_level else None
         if self.root:
             self.nodes[self.root.hash] = self.root
-
-
-# --- USAGE EXAMPLE ---
-if __name__ == "__main__":
-    # Simulate some data from two different nodes for the same key range.
-    # Node 1 has the correct data.
-    node1_data = [
-        {'key': 'key1', 'value': 'value1', 'vector_clock': {'n1': 1}},
-        {'key': 'key2', 'value': 'value2', 'vector_clock': {'n1': 1}},
-        {'key': 'key3', 'value': 'value3', 'vector_clock': {'n1': 1}},
-    ]
-
-    # Node 2 has one inconsistent key ('key2').
-    node2_data = [
-        {'key': 'key1', 'value': 'value1', 'vector_clock': {'n1': 1}},
-        {'key': 'key2', 'value': 'stale_value', 'vector_clock': {'n1': 0}}, # Inconsistent
-        {'key': 'key3', 'value': 'value3', 'vector_clock': {'n1': 1}},
-    ]
-
-    # Build Merkle trees for both nodes.
-    tree1 = MerkleTree(node1_data)
-    tree2 = MerkleTree(node2_data)
-
-    print(f"Node 1 Root Hash: {tree1.get_root_hash()}")
-    print(f"Node 2 Root Hash: {tree2.get_root_hash()}")
-    print("-" * 30)
-    print(f"Hashes are different: {tree1.get_root_hash() != tree2.get_root_hash()}")
-    print("This difference indicates the nodes are out of sync and need to compare sub-trees.")
