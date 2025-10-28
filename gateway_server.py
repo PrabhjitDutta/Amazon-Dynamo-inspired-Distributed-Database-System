@@ -165,9 +165,7 @@ def locate_key(key):
     }), 200
 
 # --- SSL Context for HTTPS ---
-# For a real production environment, you would use proper certificates.
-# For a local test, we can generate a self-signed cert.
-# You can generate these with:
+# We generate a self-signed cert.
 # openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365 -subj "/CN=localhost"
 
 # Define paths relative to the script's directory for robustness
@@ -180,7 +178,6 @@ def generate_self_signed_cert():
     if not os.path.exists(CERT_FILE) or not os.path.exists(KEY_FILE):
         print(f"Generating self-signed SSL certificate ({CERT_FILE}, {KEY_FILE})...")
         try:
-            # Use subprocess for better error handling. Requires openssl to be in the system's PATH.
             command = [
                 'openssl', 'req', '-x509', '-newkey', 'rsa:4096', '-nodes',
                 '-out', CERT_FILE, '-keyout', KEY_FILE,
@@ -215,6 +212,4 @@ if __name__ == '__main__':
     print(f"Starting Gateway Admin & Bootstrap Server on HTTPS port {GATEWAY_PORT}...")
     print(f"Admin Token: {ADMIN_TOKEN[:4]}... (use this in X-Admin-Token header for node management)")
     
-    # Flask's development server can run with SSL and in threaded mode
-    # For production, use a WSGI server like Gunicorn with appropriate workers.
     app.run(host='0.0.0.0', port=GATEWAY_PORT, ssl_context=ssl_context, threaded=True)

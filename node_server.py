@@ -12,7 +12,6 @@ from functools import wraps
 from cryptography.fernet import Fernet
 from flask import Flask, request, jsonify
 
-# Import the local KVStore class
 from kv_store import KVStore
 from Hash_Ring import HashRing
 from hint_manager import HintManager
@@ -78,7 +77,6 @@ READ_QUORUM = 1        # R
 
 
 # --- SSL Configuration ---
-# This node will also use HTTPS. We'll use the same certs for simplicity in local testing.
 # Define paths relative to the script's directory to ensure they are found.
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CERT_FILE = os.path.join(SCRIPT_DIR, 'cert.pem')

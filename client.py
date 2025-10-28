@@ -3,8 +3,6 @@ import sys
 import requests
 import random
 import json
-
-# Import the utility function to avoid duplicating logic
 from vector_clock_utils import merge_clocks
 
 # --- Configuration ---
@@ -27,7 +25,6 @@ def get_coordinator_for_key(key):
     try:
         response = requests.get(url, verify=False, timeout=3)
         response.raise_for_status()
-        # The gateway now returns a preference list
         return response.json().get('preference_list'), None
     except requests.exceptions.RequestException as e:
         return None, str(e)
@@ -63,7 +60,7 @@ def get_key(key, silent=False):
                 print(f"Context (vector clock) for '{key}' has been saved/updated.")
                 return # Success, exit function
             elif response.status_code == 300: # Conflict
-                print("\n--- !!! DATA CONFLICT DETECTED !!! ---")
+                print("\nDATA CONFLICT DETECTED!")
                 print("Multiple versions of the key exist. Please resolve the conflict.")
                 print(json.dumps(response_data, indent=2))
                 save_context(key, response_data)
@@ -195,7 +192,6 @@ def locate_key(key, admin_token):
 
 def dump_node_data(node_id, admin_token):
     """Sends a request to a specific node to dump all of its data."""
-    # The node_id should be in 'ip:port' format.
     url = f"https://{node_id}/admin/dump-data"
     headers = {'X-Admin-Token': admin_token}
     print(f"Sending GET request to: {url}")
